@@ -19,6 +19,8 @@
 
 set -e
 
+pkill -3 -f .*-XX:OnOutOfMemoryError=.*killjava.*
+
 echo "
 Process Status (Before)
 =======================
