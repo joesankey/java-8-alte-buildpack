@@ -24,10 +24,8 @@ echo '{
     "handlers": ["pagerduty"],
     "notification": "'"$DETAILS"'",
     "name": "killjava",
-    "monit_timestamp": "'"$DATE"'",
-    "monit_message": "'"$DETAILS"'",
-    "status": "2",
-    "subscribers": ["keepalives"], 
+    "status": 2,
+    "subscribers": ["base"], 
     "runbook": "no runbook",
     "output": "'"$DETAILS"'"
 }' | nc -w1 sensu-dfw.wbx2.com 3030 || true
