@@ -17,6 +17,21 @@
 
 # Kill script for use as the parameter of OpenJDK's -XX:OnOutOfMemoryError
 
+DETAILS="$(ps -ef | grep killjava)"
+DATE="$(date)"
+
+echo '{
+    "handlers": ["pagerduty"],
+    "notification": "'"$DETAILS"'",
+    "name": "killjava",
+    "monit_timestamp": "'"$DATE"'",
+    "monit_message": "'"$DETAILS"'",
+    "status": "2",
+    "subscribers": ["keepalives"], 
+    "runbook": "no runbook",
+    "output": "'"$DETAILS"'"
+}' | nc -w1 sensu-dfw.wbx2.com 3030 || true
+
 set -e
 
 pkill -3 -f .*-XX:OnOutOfMemoryError=.*killjava.*
