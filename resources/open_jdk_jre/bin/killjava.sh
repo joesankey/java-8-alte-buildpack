@@ -27,7 +27,9 @@ echo '{
     "status": 2,
     "subscribers": ["base"], 
     "runbook": "no runbook",
-    "output": "'"$DETAILS"'"
+    "output": "'"$DETAILS"'",
+    "service_level": "prod",
+    "page_worthy": "true"
 }' | nc -w1 sensu-dfw.wbx2.com 3030 || true
 
 set -e
