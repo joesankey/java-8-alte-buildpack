@@ -26,7 +26,7 @@ echo '{
     "name": "killjava",
     "status": 2,
     "subscribers": ["base"], 
-    "runbook": "no runbook",
+    "runbook": "CF app instance crashed - investigate via app logs in kibana . . .",
     "output": "'"$DETAILS"'",
     "service_level": "prod",
     "page_worthy": "true"
