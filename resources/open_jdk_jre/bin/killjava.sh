@@ -23,7 +23,7 @@ DATE="$(date)"
 echo '{
     "handlers": ["pagerduty"],
     "notification": "'"$DETAILS"'",
-    "name": "killjava",
+    "name": "'"$NEW_RELIC_APP_NAME"'",
     "status": 2,
     "subscribers": ["base"], 
     "runbook": "CF app instance crashed - investigate via app logs in kibana . . .",
