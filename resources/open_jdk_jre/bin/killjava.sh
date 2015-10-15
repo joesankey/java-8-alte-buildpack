@@ -20,6 +20,8 @@
 DETAILS="$(ps -ef | grep killjava)"
 DATE="$(date)"
 
+# Generate a sensu alert
+
 echo '{
     "handlers": ["pagerduty"],
     "notification": "'"$DETAILS"'",
@@ -31,6 +33,10 @@ echo '{
     "service_level": "prod",
     "page_worthy": "true"
 }' | nc -w1 sensu-dfw.wbx2.com 3030 || true
+
+# Emit a metric
+
+echo "alert.oomkiller.$NEW_RELIC_APP_NAME:1|c" | nc -w 3 -u stats-util-dfw.wbx2.com 8125
 
 set -e
 
