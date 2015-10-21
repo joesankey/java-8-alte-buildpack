@@ -24,12 +24,12 @@ DATE="$(date)"
 
 echo '{
     "handlers": ["pagerduty"],
-    "notification": "'"$DETAILS"'",
-    "name": "'"$NEW_RELIC_APP_NAME"'",
+    "notification": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
+    "name": "'"$NEW_RELIC_APP_NAME"' instance crashed",
     "status": 2,
     "subscribers": ["base"], 
-    "runbook": "CF app instance crashed - investigate via app logs in kibana . . .",
-    "output": "'"$DETAILS"'",
+    "runbook": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
+    "output": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
     "service_level": "prod",
     "page_worthy": "true"
 }' | nc -w1 sensu-dfw.wbx2.com 3030 || true
