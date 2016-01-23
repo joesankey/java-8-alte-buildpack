@@ -32,7 +32,7 @@ echo '{
     "output": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
     "service_level": "prod",
     "page_worthy": "true"
-}' | nc -w1 sensu-dfw.wbx2.com 3030 || true
+}' | nc -w 1 sensu-dfw.wbx2.com 3030 || true
 
 # Emit a metric
 
