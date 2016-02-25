@@ -25,7 +25,7 @@ DATE="$(date)"
 echo '{
     "handlers": ["pagerduty"],
     "notification": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
-    "name": "'"$NEW_RELIC_APP_NAME"' instance_crashed",
+    "name": "'"$NEW_RELIC_APP_NAME"'_instance_crashed",
     "status": 2,
     "subscribers": ["base"], 
     "runbook": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
