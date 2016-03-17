@@ -17,35 +17,12 @@
 
 # Kill script for use as the parameter of OpenJDK's -XX:OnOutOfMemoryError
 
-DETAILS="$(ps -ef | grep killjava)"
-DATE="$(date)"
-
-# Generate a sensu alert
-
-echo '{
-    "handlers": ["pagerduty"],
-    "notification": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
-    "name": "'"$NEW_RELIC_APP_NAME"'_instance_crashed",
-    "status": 2,
-    "subscribers": ["base"], 
-    "runbook": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
-    "output": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
-    "service_level": "prod",
-    "page_worthy": "true"
-}' | nc -w 1 sensu-dfw.wbx2.com 3030 || true
-
-# Emit a metric
-
-echo "alert.oomkiller.$NEW_RELIC_APP_NAME:1|c" | nc -w 3 -u stats-util-dfw.wbx2.com 8125
-
 set -e
-
-pkill -3 -f .*-XX:OnOutOfMemoryError=.*killjava.*
 
 echo "
 Process Status (Before)
 =======================
-$(ps -ef)
+$(ps -eo rss,pid,euser,args:100 --sort %mem | grep -v grep | grep -i java | awk '{printf $1/1024 "MB"; $1=""; print }')
 
 ulimit (Before)
 ===============
@@ -55,6 +32,8 @@ Free Disk Space (Before)
 ========================
 $(df -h)
 "
+
+pkill -3 -f .*-XX:OnOutOfMemoryError=.*killjava.*
 
 pkill -9 -f .*-XX:OnOutOfMemoryError=.*killjava.*
 
@@ -71,3 +50,24 @@ Free Disk Space (After)
 =======================
 $(df -h)
 "
+
+set +e
+
+# Emit a metric
+
+echo "alert.oomkiller.$NEW_RELIC_APP_NAME:1|c" | nc -w 3 -u stats-util-dfw.wbx2.com 8125
+
+# Generate a sensu alert
+
+echo '{
+    "handlers": ["pagerduty"],
+    "notification": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
+    "name": "'"$NEW_RELIC_APP_NAME"'_instance_crashed",
+    "status": 2,
+    "subscribers": ["base"],
+    "runbook": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
+    "output": "'"$NEW_RELIC_APP_NAME"' instance crashed - investigate via app logs in kibana",
+    "service_level": "prod",
+    "page_worthy": "true"
+}' | nc -w 1 sensu-dfw.wbx2.com 3030
+
